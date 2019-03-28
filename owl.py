@@ -35,10 +35,11 @@ owl_url_matches = "https://api.overwatchleague.com/matches"
 owl_url_match_stat_test = "https://api.overwatchleague.com/stats/matches/21211/maps/1"
 owl_url_match_stat = "https://api.overwatchleague.com/stats/matches/"
 owl_url_teams = "https://api.overwatchleague.com/teams"
+owl_url_players = "https://api.overwatchleague.com/teams"
 owl_url_stat_players = "https://api.overwatchleague.com/stats/players"
 
 update_url_list = [owl_url_ranking,owl_url_standings, owl_url_matches,
-                   owl_url_teams]
+                   owl_url_teams,owl_url_players, owl_url_stat_players]
 
 owl_divisions = {79 : 'ATL', 80 : 'PAC'}
 
@@ -149,7 +150,8 @@ def download_match_data(matches):
         mid = match['id']
         ngames = len(match['games'])
         mdir = os.path.join(owl_match_dir,str(mid))
-        os.mkdir(mdir)
+        if not os.path.isdir(mdir):
+            os.mkdir(mdir)
         for i in range(1,ngames+1):
             durl = posixpath.join(owl_url_match_stat, str(mid), "maps", str(i))
             page_text = urllib.request.urlopen(durl).read()
