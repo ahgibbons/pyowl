@@ -204,13 +204,14 @@ def finalized_elo_plot(elo_table):
     ax2.set_xlabel('')
     plt.tight_layout()
     
-def plot_elo_date(elo):
+def plot_elo_date(elo,elo_type='Match Elo'):
     elo_track_time  = elo.elo_track_time
     
     for t in team_dict.keys():
-        elo_time = elo_track_time[t]['Match Elo']
+        elo_time = elo_track_time[t][elo_type]
         d,e = zip(*elo_time)
-        plt.step(d,e,'-o',label=t,where='post')
+        #plt.step(d,e,'-o',label=t,where='post')
+        plt.plot(d,e,'-o',label=t)
         plt.annotate(t,elo_time[-1])
     
     
