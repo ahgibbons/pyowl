@@ -118,6 +118,7 @@ def download_match_data(matches):
                 file.write(page_text)
             print("Downloaded {:d} {:d}".format(mid,i))
             
+            
 owl_data = load_from_disc()
 team_dict = {}
 

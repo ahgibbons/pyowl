@@ -25,15 +25,15 @@ class OWL_Elo:
         self.elo_table = gen_begin_table()
         self.elo_track = gen_elo_track() 
         self.elo_track_time = gen_elo_track_time()
-        self.k_factor = elo_K_factor
+        self.k_factor = kfactor
         
     def calc_elo(self, match_list):
-        errors = [self.update_match(m) for m in match_list]
+        errors = np.array([self.update_match(m) for m in match_list])
         return errors
         
 
         
-    def update_match(self,match):
+    def update_match(self,match,verbose=False):
         elo_table = self.elo_table
         elo_track = self.elo_track
         elo_track_time = self.elo_track_time
@@ -51,7 +51,7 @@ class OWL_Elo:
         
         RA = elo_table.loc[elo_table['ID'] == A_id, 'Match Elo'].values[0]
         RB = elo_table.loc[elo_table['ID'] == B_id, 'Match Elo'].values[0]
-        RA_2, RB_2 = elo_update(RA,RB,result)
+        RA_2, RB_2 = elo_update(RA,RB,result,self.k_factor)
         
         prediction_error = predict_error(RA, RB, result)
 
@@ -61,7 +61,7 @@ class OWL_Elo:
         
         RA_m2 = elo_table.loc[elo_table['ID'] == A_id, 'Map Elo(2)'].values[0]
         RB_m2 = elo_table.loc[elo_table['ID'] == B_id, 'Map Elo(2)'].values[0]
-        RA_m2_2, RB_m2_2 = elo_update(RA_m2,RB_m2,result2)
+        RA_m2_2, RB_m2_2 = elo_update(RA_m2,RB_m2,result2,self.k_factor)
         
         elo_table.loc[elo_table['ID']==A_id, 'Map Elo(2)'] = RA_m2_2
         elo_table.loc[elo_table['ID']==B_id, 'Map Elo(2)'] = RB_m2_2
@@ -100,7 +100,7 @@ class OWL_Elo:
         
             RA = elo_table.loc[elo_table['ID'] == A_id, elo_type].values[0]
             RB = elo_table.loc[elo_table['ID'] == B_id, elo_type].values[0]
-            RA_2, RB_2 = elo_update(RA,RB,result)
+            RA_2, RB_2 = elo_update(RA,RB,result,self.k_factor)
             RA_map, RB_map = elo_update(RA_map, RB_map, result)
         
     
@@ -113,7 +113,8 @@ class OWL_Elo:
             elo_track_time[A['abbreviatedName']][elo_type].append((match_time,RA_2))
             elo_track_time[B['abbreviatedName']][elo_type].append((match_time,RB_2))
         
-            print("{:s} vs {:s};\t{:f} -> {:f}".format(A['abbreviatedName'],
+            if verbose:
+                print("{:s} vs {:s};\t{:f} -> {:f}".format(A['abbreviatedName'],
                       B['abbreviatedName'], RA_map_old, RA_map))
         
         elo_table.loc[elo_table['ID']==A_id, "Map Elo"] = RA_map
