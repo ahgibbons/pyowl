@@ -23,6 +23,7 @@ class Team:
         self.gameloss = rjson['records'][0]['gameLoss']
         self.primaryColor = tjson['primaryColor']
         self.secondaryColor = tjson['secondaryColor']
+        self.placement = rjson['placement']
         
 class Match:
     def __init__(self,mjson,team_dict):

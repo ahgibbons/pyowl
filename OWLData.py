@@ -129,5 +129,7 @@ for t in owl_data['ranking']['content']:
             tjson = team['competitor']
     team_dict[t['competitor']['id']] = classes.Team(tjson,t)
     
+team_id = dict([(t.abbreviatedName,t.id) for t in team_dict.values()])
+    
 matches_list = [classes.Match(m,team_dict) for m in finished_matches(owl_data['matches']['content'])]
 matches_list.sort(key = lambda k: k.startTimeStamp)

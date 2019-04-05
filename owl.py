@@ -39,6 +39,8 @@ owl_matches = owl_game_data['matches']
 owl_standings = owl_game_data['standings']
 owl_teams = owl_game_data['teams']
 
+cur_ranking = [a['competitor']['abbreviatedName'] for a in owl_ranking['content']]
+
 match_content = owl_matches['content']
 match_content.sort(key=lambda x: x['startDate'])
 ranking_content = owl_ranking['content']  
