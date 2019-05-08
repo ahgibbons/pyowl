@@ -16,6 +16,9 @@ import json
 
 import classes
 
+map_type_dict = {'ilios' : 'control', 'hollywood' : 'hybrid', 'volskaya' : 'assault',
+                 'nepal' : 'control', 'numbani}
+
 owl_data_dir = "data"
 owl_match_dir = os.path.join("data","matches")
 owl_logo_svg_dir = os.path.join("data","logos_svg")
@@ -31,9 +34,11 @@ owl_url_match_stat = "https://api.overwatchleague.com/stats/matches/"
 owl_url_teams = "https://api.overwatchleague.com/teams"
 owl_url_players = "https://api.overwatchleague.com/teams"
 owl_url_stat_players = "https://api.overwatchleague.com/stats/players"
+owl_url_maps = "https://api.overwatchleague.com/maps"
 
 update_url_list = [owl_url_ranking,owl_url_standings, owl_url_matches,
-                   owl_url_teams,owl_url_players, owl_url_stat_players]
+                   owl_url_teams,owl_url_players, owl_url_stat_players,
+                   owl_url_maps]
 
 MATCH_STATUS_CONCLUDED = "CONCLUDED"
 MATCH_STATUS_PENDING = "PENDING"
@@ -44,11 +49,13 @@ def load_from_website():
     owl_matches_text = urllib.request.urlopen(owl_url_matches).read()
     owl_standings_text = urllib.request.urlopen(owl_url_standings).read()
     owl_teams_text = urllib.request.urlopen(owl_url_teams).read()
+    owl_maps_text = urllib.request.urlopen(owl_url_maps).read()
     
     owl_ranking = json.loads(owl_ranking_text)
     owl_matches = json.loads(owl_matches_text)
     owl_standings = json.loads(owl_standings_text)
     owl_teams = json.loads(owl_teams_text)
+    owl_maps = json.loads(owl_maps_text)
     
 
     return {'ranking' : owl_ranking, 'matches' : owl_matches, 
@@ -66,14 +73,19 @@ def load_from_disc(data_dir = owl_data_dir):
         
     with open(os.path.join(data_dir, 'teams.json'),'r') as f:
         owl_teams_text = f.read()
+        
+    with open(os.path.join(data_dir, 'maps.json'), 'r') as f:
+        owl_maps_text = f.read()
     
     owl_ranking = json.loads(owl_ranking_text)
     owl_matches = json.loads(owl_matches_text)
     owl_standings = json.loads(owl_standings_text)
     owl_teams = json.loads(owl_teams_text)
+    owl_maps = json.loads(owl_maps_text)
 
     return {'ranking' : owl_ranking, 'matches' : owl_matches, 
-            'standings' : owl_standings, 'teams' : owl_teams}
+            'standings' : owl_standings, 'teams' : owl_teams,
+            'maps' : owl_maps}
     
 def download_data():
     for url in owl_extensions:
