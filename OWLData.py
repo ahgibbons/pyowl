@@ -11,13 +11,14 @@ import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import pytz
 import os
+import urllib
 
 import json
 
 import classes
 
 map_type_dict = {'ilios' : 'control', 'hollywood' : 'hybrid', 'volskaya' : 'assault',
-                 'nepal' : 'control', 'numbani}
+                 'nepal' : 'control', 'numbani' : 'hybrid'}
 
 owl_data_dir = "data"
 owl_match_dir = os.path.join("data","matches")
@@ -25,7 +26,7 @@ owl_logo_svg_dir = os.path.join("data","logos_svg")
 owl_logo_png_dir = os.path.join("data","logos_svg")
 
 owl_url_root = "https://api.overwatchleague.com/"
-owl_extensions = ["ranking", "standings", "matches", "teams"]
+owl_extensions = ["ranking", "standings", "matches", "teams","maps"]
 owl_url_ranking = "https://api.overwatchleague.com/ranking"
 owl_url_standings = "https://api.overwatchleague.com/standings"
 owl_url_matches = "https://api.overwatchleague.com/matches"
@@ -74,7 +75,7 @@ def load_from_disc(data_dir = owl_data_dir):
     with open(os.path.join(data_dir, 'teams.json'),'r') as f:
         owl_teams_text = f.read()
         
-    with open(os.path.join(data_dir, 'maps.json'), 'r') as f:
+    with open(os.path.join(data_dir, 'maps.json'), 'r', encoding='utf8') as f:
         owl_maps_text = f.read()
     
     owl_ranking = json.loads(owl_ranking_text)
